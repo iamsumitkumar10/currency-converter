@@ -1,8 +1,8 @@
-// const BASE_URL ="https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/";
+const BASE_URL ="https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/";
 
 // const BASE_URL = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/btc.min.json";
 // const apikey="710383ab23f15259a4c8ec13";
-const BASE_URL="https://v6.exchangerate-api.com/v6/710383ab23f15259a4c8ec13/";
+// const BASE_URL="https://v6.exchangerate-api.com/v6/710383ab23f15259a4c8ec13/";
 
 // const BASE_URL= `https://v6.exchangerate-api.com/v6/${apikey}/latest/currencies/`;
 
@@ -33,7 +33,7 @@ for (let select of dropdowns) {
 }
 
 
-
+// update flag to their name 
 const updateFlag = (element) => {
     // console.log(element);
     let currcode = element.value;
