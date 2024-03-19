@@ -36,9 +36,7 @@ let convertCurrency = () => {
         let fromExchangeRate = data.conversion_rates[fromCurrency];
         let toExchangeRate = data.conversion_rates[toCurrency];
         const convertedAmount = (amount / fromExchangeRate) * toExchangeRate;
-        result.innerHTML = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(
-          2
-        )} ${toCurrency}`;
+        result.innerHTML = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
       });
   } else {
     alert("Please fill in the amount");
