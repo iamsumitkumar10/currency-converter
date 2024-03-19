@@ -1,69 +1,51 @@
-const BASE_URL ="https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/";
+let api = 'https://v6.exchangerate-api.com/v6/710383ab23f15259a4c8ec13/latest/USD';
+const fromDropDown = document.getElementById("from-currency-select");
+const toDropDown = document.getElementById("to-currency-select");
 
-// const BASE_URL = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/btc.min.json";
-// const apikey="710383ab23f15259a4c8ec13";
-// const BASE_URL="https://v6.exchangerate-api.com/v6/710383ab23f15259a4c8ec13/";
+//Create dropdown from the currencies array
+currencies.forEach((currency) => {
+  const option = document.createElement("option");
+  option.value = currency;
+  option.text = currency;
+  fromDropDown.add(option);
+});
 
-// const BASE_URL= `https://v6.exchangerate-api.com/v6/${apikey}/latest/currencies/`;
+//Repeat same thing for the other dropdown
+currencies.forEach((currency) => {
+  const option = document.createElement("option");
+  option.value = currency;
+  option.text = currency;
+  toDropDown.add(option);
+});
 
-const dropdowns = document.querySelectorAll(".dropdown select");
-const btn = document.querySelector(" form button ");   
+//Setting default values
+fromDropDown.value = "USD";
+toDropDown.value = "INR";
 
-const fromcurr = document.querySelector(".from select");
-const tocurr = document.querySelector(".to select");
+let convertCurrency = () => {
+  //Create References
+  const amount = document.querySelector("#amount").value;
+  const fromCurrency = fromDropDown.value;
+  const toCurrency = toDropDown.value;
 
-const msg = document.querySelector(".msg");
-let i=0;
-for (let select of dropdowns) {
-    for (currcode in countryList) {
-        let newOption = document.createElement("option");
-        newOption.innerText = currcode;
-        newOption.value = currcode;
-        if (select.name ==="from" && currcode === "USD"){
-            newOption.selected =" selected";
-        } else if(select.name ==="to" && currcode === "INR"){
-            newOption.selected = "selected";
-        }
-        select.append(newOption);
-    }
-
-    select.addEventListener("change", (evt)=>{
-        updateFlag(evt.target);
-    });
-}
-
-
-// update flag to their name 
-const updateFlag = (element) => {
-    // console.log(element);
-    let currcode = element.value;
-    let country_code = countryList[currcode];
-    let newSrc= `https://flagsapi.com/${country_code}/flat/64.png`;
-    let img= element.parentElement.querySelector("img");
-    img.src=newSrc;
+  //If amount input field is not empty
+  if (amount.length != 0) {
+    fetch(api)
+      .then((resp) => resp.json())
+      .then((data) => {
+        let fromExchangeRate = data.conversion_rates[fromCurrency];
+        let toExchangeRate = data.conversion_rates[toCurrency];
+        const convertedAmount = (amount / fromExchangeRate) * toExchangeRate;
+        result.innerHTML = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(
+          2
+        )} ${toCurrency}`;
+      });
+  } else {
+    alert("Please fill in the amount");
+  }
 };
 
-
-
-btn.addEventListener("click",async(evt) => {
-    evt.preventDefault();
-    let amounts = document.querySelectorAll(".amount input");
-    let amtVal = amounts.value;
-    // console.log(amtVal)
-    if(amtVal === "" || amtVal < 1){
-        amtVal=1;
-        amounts.value="1";
-    }
-    // console.log(fromcurr.value, tocurr.value);
-    const URL =`${BASE_URL}/${fromcurr.value.toLowerCase()}/${tocurr.value.toLowerCase()}.json`;
-    let response = await fetch(URL);
-    let data = await response.json();
-    let rate = data[tocurr.value.toLowerCase()];
-    console.log(rate);
-
-
-    let finalAmount = amtVal*rate;
-    msg.innerText = `${amtVal} ${fromcurr.value} = ${finalAmount} ${tocurr.value}`;
-
-
-}); 
+document
+  .querySelector("#convert-button")
+  .addEventListener("click", convertCurrency);
+window.addEventListener("load", convertCurrency);
